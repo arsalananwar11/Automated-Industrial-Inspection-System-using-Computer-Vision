@@ -22,9 +22,9 @@ class BottleEdgeDetectionPipeline:
                 break
 
             focus_segment = bottle_detector.perform_edge_detection_on_focus_segment(frame, blurRestOfFrame)
-            bottle_detector.draw_focus_area_and_text(focus_segment, "Bottles Scan")
+            bottle_detector.draw_focus_area_and_text(focus_segment, "Scanning Bottles")
 
-            cv2.imshow('Edge Detection', focus_segment)
+            cv2.imshow('Scanning Bottles', focus_segment)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break

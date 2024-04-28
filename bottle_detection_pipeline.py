@@ -48,7 +48,7 @@ class BottleDetectionPipeline:
                 text = "Bottle Detected"
                 bottle_detector.draw_box_and_text(focus_segment, text, top_left, bottom_right)
 
-            text = "Area of Focus"
+            text = "Detecting Bottles"
             bottle_detector.draw_focus_area_and_text(focus_segment, text)
             cv2.imshow('Bottle Detection', focus_segment)
 
