@@ -21,7 +21,7 @@ class BottleDetectionPipeline:
             if not ret:
                 break
 
-            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            #gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             matches = []
 
             for scale in np.linspace(0.5, 1.5, 20)[::-1]:  
@@ -31,7 +31,8 @@ class BottleDetectionPipeline:
                 if resized_width > frame.shape[1] or resized_height > frame.shape[0]:
                     continue
                 
-                focus_segment = bottle_detector.get_focus_segment(frame)
+                blurred_frame = bottle_detector.perform_frame_blurring(frame)
+                focus_segment = bottle_detector.get_focus_segment(frame, blurred_frame)
                 focus_segment_gray = cv2.cvtColor(focus_segment, cv2.COLOR_BGR2GRAY)
                 result = cv2.matchTemplate(focus_segment_gray, resized_template, cv2.TM_CCOEFF_NORMED)
                 loc = np.where(result >= threshold)
@@ -44,9 +45,11 @@ class BottleDetectionPipeline:
                 top_left = (pt[0] - padding, pt[1] - padding)
                 bottom_right = (pt[0] + padding + int(resized_width * scale_factor_x), pt[1] + padding + int(resized_height * scale_factor_y))
                 cv2.rectangle(focus_segment, top_left, bottom_right, (0, 255, 0), 2)
-                bottle_detector.draw_rectangle_and_text(focus_segment, "bottle", top_left, bottom_right)
+                text = "Bottle Detected"
+                bottle_detector.draw_box_and_text(focus_segment, text, top_left, bottom_right)
 
-            bottle_detector.draw_rectangle_and_text(focus_segment, "Area of Focus")
+            text = "Area of Focus"
+            bottle_detector.draw_focus_area_and_text(focus_segment, text)
             cv2.imshow('Bottle Detection', focus_segment)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
