@@ -47,7 +47,7 @@ class BottleDetectionPipeline:
                 bottle_detector.draw_rectangle_and_text(focus_segment, "bottle", top_left, bottom_right)
 
             bottle_detector.draw_rectangle_and_text(focus_segment, "Area of Focus")
-            cv2.imshow('Video', focus_segment)
+            cv2.imshow('Bottle Detection', focus_segment)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
