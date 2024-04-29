@@ -47,26 +47,26 @@ class BottleDetectionPipeline:
                     break  # Assumes you want the first match only for simplicity
             
             filtered_coordinates = bottle_detector.remove_redundant_coordinates(matches)
-            self.update_bottle_tracks(filtered_coordinates, frame.shape, resized_template.shape)
+            self.update_bottle_tracks(filtered_coordinates, focus_segment.shape, resized_template.shape)
 
             for track_id, track_info in self.tracks.items():
                 x, y = track_info['position']
                 scale = track_info['scale']
                 top_left = (int(x - padding), int(y - padding))
                 bottom_right = (int(x + padding + template_width * scale), int(y + padding + template_height * scale))
-                cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
-                cv2.putText(frame, f'ID: {track_id}', (top_left[0], top_left[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                #cv2.rectangle(focus_segment, top_left, bottom_right, (0, 255, 0), 2)
+                #cv2.putText(focus_segment, f'ID: {track_id}', (top_left[0], top_left[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             
             for pt, scale in filtered_coordinates[:1]:
                 top_left = (pt[0] - padding, pt[1] - padding)
                 bottom_right = (pt[0] + padding + int(resized_width * scale_factor_x), pt[1] + padding + int(resized_height * scale_factor_y))
                 cv2.rectangle(focus_segment, top_left, bottom_right, (0, 255, 0), 2)
-                text = "Bottle Detected"
-                bottle_detector.draw_box_and_text(focus_segment, text, top_left, bottom_right)
+                #text = "Bottle Detected"
+                bottle_detector.draw_box_and_text(focus_segment, 'Bottle Detected', top_left, bottom_right)
 
-            cv2.putText(frame, f'Total Count: {self.total_bottle_count}', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-            bottle_detector.draw_focus_area_and_text(focus_segment, text)
-            cv2.imshow('Bottle Detection', frame)  # Display the main frame
+            cv2.putText(focus_segment, f'Total Count: {self.total_bottle_count}', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            bottle_detector.draw_focus_area_and_text(focus_segment, '')
+            cv2.imshow('Bottle Detection',focus_segment)  # Display the main frame
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
