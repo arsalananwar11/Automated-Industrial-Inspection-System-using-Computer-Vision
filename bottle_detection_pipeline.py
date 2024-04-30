@@ -13,9 +13,10 @@ bottle_detector = BottleDetector(redundancy_range)
 class BottleDetectionPipeline:
     def run_bottle_detection_pipeline(self, template_file_path='./data/template.jpeg', bottle_production_video_file_path='./data/bottle_production.mp4'):
         template = cv2.imread(template_file_path, 0)
+        print(template.shape)
         bottle_production_video = cv2.VideoCapture(bottle_production_video_file_path)
         template_height, template_width = template.shape[:2]
-        cv2.namedWindow('Bottle Detection', cv2.WINDOW_NORMAL)
+        # cv2.namedWindow('Bottle Detection', cv2.WINDOW_NORMAL)
         while True:
             ret, frame = bottle_production_video.read()
             if not ret:
@@ -50,13 +51,19 @@ class BottleDetectionPipeline:
 
             text = "Detecting Bottles"
             bottle_detector.draw_focus_area_and_text(focus_segment, text)
-            cv2.imshow('Bottle Detection', focus_segment)
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            ret, jpeg = cv2.imencode('.jpg', focus_segment)
+            frame = jpeg.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+            # cv2.imshow('Bottle Detection', focus_segment)
+
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     break
 
         bottle_production_video.release()   
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     BottleDetectionPipeline().run_bottle_detection_pipeline()

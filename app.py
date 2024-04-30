@@ -21,8 +21,9 @@ def bottle_scanning():
 
 @app.route('/bottle_detection')
 def bottle_detection():
-    BottleDetectionPipeline().run_bottle_detection_pipeline()
-    return redirect(url_for('play_video'))
+    return Response(BottleDetectionPipeline().run_bottle_detection_pipeline(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 @app.route('/defect_detection')
 def defect_detection():
