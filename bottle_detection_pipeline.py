@@ -15,7 +15,7 @@ class BottleDetectionPipeline:
     def __init__(self):
         self.tracks = {}  # Tracks of detected bottles
         self.next_track_id = 0  # ID for the next new track
-        self.distance_threshold = 15  # Maximum distance to consider a detection part of an existing track
+        self.distance_threshold = 25  # Maximum distance to consider a detection part of an existing track
         self.no_detection_threshold = 10  # Frames allowed with no detections before removing a track
         self.total_bottle_count = 0
 
@@ -49,14 +49,6 @@ class BottleDetectionPipeline:
             filtered_coordinates = bottle_detector.remove_redundant_coordinates(matches)
             self.update_bottle_tracks(filtered_coordinates, focus_segment.shape, resized_template.shape)
 
-            for track_id, track_info in self.tracks.items():
-                x, y = track_info['position']
-                scale = track_info['scale']
-                top_left = (int(x - padding), int(y - padding))
-                bottom_right = (int(x + padding + template_width * scale), int(y + padding + template_height * scale))
-                #cv2.rectangle(focus_segment, top_left, bottom_right, (0, 255, 0), 2)
-                #cv2.putText(focus_segment, f'ID: {track_id}', (top_left[0], top_left[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-            
             for pt, scale in filtered_coordinates[:1]:
                 top_left = (pt[0] - padding, pt[1] - padding)
                 bottom_right = (pt[0] + padding + int(resized_width * scale_factor_x), pt[1] + padding + int(resized_height * scale_factor_y))
