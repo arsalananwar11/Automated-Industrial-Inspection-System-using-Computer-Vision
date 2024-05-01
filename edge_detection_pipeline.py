@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 from bottle_detector import BottleDetector
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 redundancy_range = 10
 
@@ -14,7 +17,8 @@ class BottleEdgeDetectionPipeline:
             print("Error opening video capture")
             return
 
-        cv2.namedWindow('Edge Detection', cv2.WINDOW_NORMAL)
+        # cv2.namedWindow('Edge Detection', cv2.WINDOW_NORMAL)
+        # plt.figure('Edge Detection')
 
         while True:
             ret, frame = bottle_production_video.read()
@@ -24,13 +28,22 @@ class BottleEdgeDetectionPipeline:
             focus_segment = bottle_detector.perform_edge_detection_on_focus_segment(frame, blurRestOfFrame)
             bottle_detector.draw_focus_area_and_text(focus_segment, "Scanning Bottles")
 
-            cv2.imshow('Scanning Bottles', focus_segment)
+            ret, jpeg = cv2.imencode('.jpg', focus_segment)
+            frame = jpeg.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+        #     # cv2.imshow('Scanning Bottles', focus_segment)
+        #     plt.imshow(cv2.cvtColor(focus_segment, cv2.COLOR_BGR2RGB))
+        #     plt.title('Scanning Bottles')
+        #     plt.draw()
+        #     plt.pause(0.01)
 
-        bottle_production_video.release()
-        cv2.destroyAllWindows()
+        #     if cv2.waitKey(1) & 0xFF == ord('q'):
+        #         break
+
+        # bottle_production_video.release()
+        # cv2.destroyAllWindows()
 
 if __name__ == "__main__":
   BottleEdgeDetectionPipeline().run_bottle_edge_detection_pipeline()
