@@ -21,7 +21,6 @@ class BottleDetectionPipeline:
             if not ret:
                 break
 
-            #gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             matches = []
 
             for scale in np.linspace(0.5, 1.5, 20)[::-1]:  
