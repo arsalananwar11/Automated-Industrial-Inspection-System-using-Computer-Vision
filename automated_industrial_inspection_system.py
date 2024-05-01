@@ -4,6 +4,7 @@ from edge_detection_pipeline import BottleEdgeDetectionPipeline
 VIDEO_PATH = './data/bottle_production.mp4'
 
 if __name__ == '__main__':
+    development = True
     print("\nSelect an option:")
     print("1. Bottle Scanning using Edge Detection")
     print("2. Bottle Detection on Conveyor Belt using Template Matching")
@@ -19,9 +20,9 @@ if __name__ == '__main__':
       print("0. Exit")
       blur_choice = input("Enter your choice (1, 2 or 0 to exit): ")
       blurRestOfFrame = True if blur_choice=='1' else False
-      BottleEdgeDetectionPipeline().run_bottle_edge_detection_pipeline(VIDEO_PATH, blurRestOfFrame)
+      BottleEdgeDetectionPipeline().run_bottle_edge_detection_pipeline(VIDEO_PATH, blurRestOfFrame, development=development)
     elif choice == '2':
-      BottleDetectionPipeline().run_bottle_detection_pipeline()
+      BottleDetectionPipeline().run_bottle_detection_pipeline(development=development)
     elif choice == '3':
       ## To do: We need to implement some defect detection use case
       print("Feature currently being developed. Exiting!")
