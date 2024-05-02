@@ -1,10 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Defect Detection</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Defect Detection</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Defect Detection</h1>
-    <p>Defect detection is currently under development.</p>
+  <h1>Defect Detection</h1>
+
+  <form action="/batch_process_folder" method="post" enctype="multipart/form-data">
+    <br>
+    <label for="folder_path">Image Folder Path:</label>
+    <input type="text" name="folder_path" id="folder_path" required>
+    <br><br>
+    <button type="submit" class="btn btn-primary">Batch Process Folder for Defect Classification</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    const resultsDiv = document.getElementById('results');
+
+    async function displayResults(data) {
+      resultsDiv.innerHTML = ''; // Clear previous results
+
+      if (data.message) {
+        resultsDiv.innerHTML = `<p style="color: red;">${data.message}</p>`;
+        return;
+      }
+
+      for (const result of data.results) {
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+        imageContainer.style.height = '400px';
+        imageContainer.style.width = '200px';
+
+        const imageData = `data:image/jpeg;base64,${result.image}`;
+        const image = document.createElement('img');
+        image.style.height = '300px';
+        image.style.width = '194px';
+        image.src = imageData;
+        if (result.match) {
+            const topLeft = `(${result.top_left[0]}, ${result.top_left[1]})`;
+            const bottomRight = `(${result.bottom_right[0]}, ${result.bottom_right[1]})`;
+            const caption = `No Defect Detected`;
+            imageContainer.appendChild(image);
+            imageContainer.insertAdjacentHTML('beforeend', `<p>Image: ${result.image_name}</p>`);
+            imageContainer.insertAdjacentHTML('beforeend', `<p>${caption}</p>`);
+            
+        } else {
+            const caption = `Defect Detected`;
+            imageContainer.appendChild(image);
+            imageContainer.insertAdjacentHTML('beforeend', `<p>Image: ${result.image_name}</p>`);
+            imageContainer.insertAdjacentHTML('beforeend', `<p>${caption}</p>`);
+        }
+
+        resultsDiv.appendChild(imageContainer);
+      }
+    }
+
+    const form = document.querySelector('form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const response = await fetch('/batch_process_folder', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      displayResults(data);
+    });
+  </script>
+
+  <style>
+    .image-container {
+      display: inline-block;
+      margin: 10px;
+      border: 1px solid #ddd;
+      padding: 5px;
+    }
+
+    .image-container img {
+      width: 200px;
+      height: auto;
+    }
+  </style>
 </body>
 </html>
