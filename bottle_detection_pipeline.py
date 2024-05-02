@@ -17,7 +17,7 @@ class BottleDetectionPipeline:
         self.next_track_id = 0  # ID for the next new track
         self.distance_threshold = 20  # Maximum distance to consider a detection part of an existing track
         self.no_detection_threshold = 10  # Frames allowed with no detections before removing a track
-        self.total_bottle_count = 0
+        self.total_bottle_count = -1  # Total number of bottles detected
 
     def run_bottle_detection_pipeline(self, template_file_path='./data/template.jpeg', bottle_production_video_file_path='./data/bottle_production.mp4'):
         template = cv2.imread(template_file_path, 0)
