@@ -1,0 +1,23 @@
+.image-container {
+    display: inline-block;
+    margin: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+  }
+
+  .image-container img {
+    width: 200px;
+    height: auto;
+  }
+
+  body {
+    font-family: sans-serif;  margin: 20px;  }
+
+  h1 {
+    text-align: center;  }
+
+  label {
+    display: block;  margin-bottom: 5px;  }
+
+  #results {
+    margin-top: 20px;  }

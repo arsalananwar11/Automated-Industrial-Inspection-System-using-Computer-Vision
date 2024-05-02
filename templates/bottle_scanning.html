@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bottle Scanning</title>
+    <title>Bottle Deformity Checker</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Bottle Scanning</h1>
+    <h1>Bottle Deformity Checker</h1>
     <form method="POST">
-        <label for="blur_choice">Blur rest of the video apart from the focus area?</label>
+        <label for="blur_choice">Do you want to blur rest of the video apart from the focus area?</label>
         <select id="blur_choice" name="blur_choice">
             <option value="1">Yes</option>
             <option value="0">No</option>
         </select>
-        <input type="submit" value="Start Scanning">
+        <input type="submit" class="btn btn-primary" value="Start Scanning">
     </form>
     <img src="{{ url_for('bottle_scanning') }}" />
 </body>
