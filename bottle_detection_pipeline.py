@@ -17,10 +17,15 @@ class BottleDetectionPipeline:
         bottle_production_video = cv2.VideoCapture(bottle_production_video_file_path)
         template_height, template_width = template.shape[:2]
         # cv2.namedWindow('Bottle Detection', cv2.WINDOW_NORMAL)
+        frame_count = 0
+        frame_skip = 5
         while True:
             ret, frame = bottle_production_video.read()
+            frame_count += 1
             if not ret:
                 break
+            if frame_count % frame_skip != 0:
+                continue
 
             #gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             matches = []
