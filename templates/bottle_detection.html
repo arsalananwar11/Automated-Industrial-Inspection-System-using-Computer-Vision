@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottle Detection Setup</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Select Files for Bottle Detection</h2>
+        <form action="/bottle_detection" method="post">
+            <div class="form-group">
+                <label for="template_file_path">Template Image File Path:</label>
+                <input type="text" class="form-control" id="template_file_path" name="template_file_path" required>
+            </div>
+            <div class="form-group">
+                <label for="bottle_production_video_file_path">Bottle Production Video File Path:</label>
+                <input type="text" class="form-control" id="bottle_production_video_file_path" name="bottle_production_video_file_path" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Start Detection</button>
+        </form>
+    </div>
+</body>
+</html>
